@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neon Clock with Settings</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <style>
@@ -213,9 +212,11 @@
             if (showSeconds) {
                 formattedTime += `:${padZero(seconds)}`;
             }
-            formattedTime += ` ${ampm}`.trim();
+            if (!is24HourFormat) {
+                formattedTime += `<span style="margin-left: 20px;">${ampm}</span>`;
+            }
 
-            timeElement.textContent = formattedTime;
+            timeElement.innerHTML = formattedTime.trim();
         }
 
         function padZero(number) {
