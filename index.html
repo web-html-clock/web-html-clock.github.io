@@ -15,6 +15,7 @@
             background-color: #000;
             font-family: 'Roboto', sans-serif;
             position: relative;
+            overflow: hidden;
         }
 
         .clock {
@@ -22,6 +23,8 @@
             padding: 80px;
             border-radius: 30px;
             box-shadow: 0 0 70px rgba(255, 0, 150, 0.8), 0 0 70px rgba(0, 204, 255, 0.8);
+            max-width: 95vw; /* Ограничение ширины */
+            max-height: 90vh; /* Ограничение высоты */
         }
 
         .time {
@@ -167,6 +170,29 @@
             border-radius: 5px;
             border: none;
             cursor: pointer;
+        }
+
+        /* Адаптивный дизайн для маленьких экранов */
+        @media (max-width: 768px) {
+            .time {
+                font-size: 6em; /* Уменьшение размера шрифта на маленьких экранах */
+                padding: 30px; /* Уменьшение отступов */
+            }
+
+            .clock {
+                padding: 40px; /* Уменьшение внешних отступов для блока с часами */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .time {
+                font-size: 4em; /* Еще меньше для очень маленьких экранов */
+                padding: 20px;
+            }
+
+            .clock {
+                padding: 20px; /* Уменьшение внешних отступов еще больше */
+            }
         }
     </style>
 </head>
