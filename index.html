@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neon Clock</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="script.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <style>
         /* CSS код */
@@ -22,19 +20,19 @@
 
         .clock {
             background: linear-gradient(90deg, rgba(255,0,150,1) 0%, rgba(0,204,255,1) 100%);
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(255, 0, 150, 0.8), 0 0 30px rgba(0, 204, 255, 0.8);
+            padding: 50px; /* Увеличен padding для большей выразительности */
+            border-radius: 25px;
+            box-shadow: 0 0 50px rgba(255, 0, 150, 0.8), 0 0 50px rgba(0, 204, 255, 0.8);
         }
 
         .time {
-            font-size: 5em; /* Увеличенный размер шрифта */
+            font-size: 8em; /* Еще больше увеличенный размер шрифта */
             color: white;
             text-align: center;
-            padding: 20px;
+            padding: 30px;
             background: rgba(0, 0, 0, 0.6);
-            border-radius: 10px;
-            box-shadow: 0 0 15px #0ff, 0 0 15px #f0f;
+            border-radius: 20px;
+            box-shadow: 0 0 30px #0ff, 0 0 30px #f0f;
         }
 
         .fullscreen-button {
@@ -61,7 +59,7 @@
         <div id="time" class="time">00:00:00 AM</div>
     </div>
 
-    <button id="fullscreen-btn" class="fullscreen-button">📺</button>
+    <button id="fullscreen-btn" class="fullscreen-button">⛶</button>
 
     <script>
         // JavaScript код для отображения времени
@@ -77,6 +75,7 @@
             hours = hours % 12;
             hours = hours ? hours : 12; // '0' should be displayed as '12'
 
+            // Add leading zeros for minutes and seconds
             const formattedTime = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)} ${ampm}`;
             timeElement.textContent = formattedTime;
         }
@@ -85,17 +84,30 @@
             return number < 10 ? '0' + number : number;
         }
 
-        setInterval(updateClock, 1000);
-        updateClock(); // Initial call to show clock immediately
+        // Запуск функции при загрузке страницы и каждые 1000 миллисекунд
+        document.addEventListener('DOMContentLoaded', () => {
+            updateClock(); // Initial call to show the clock immediately
+            setInterval(updateClock, 1000); // Update clock every second
+        });
 
-        // JavaScript код для перехода в полноэкранный режим
+        // JavaScript код для перехода в полноэкранный режим с поддержкой Safari
         const fullscreenBtn = document.getElementById('fullscreen-btn');
         fullscreenBtn.addEventListener('click', () => {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
+            const element = document.documentElement;
+
+            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+                // Запуск полноэкранного режима для различных браузеров
+                if (element.requestFullscreen) {
+                    element.requestFullscreen();
+                } else if (element.webkitRequestFullscreen) { // Safari поддержка
+                    element.webkitRequestFullscreen();
+                }
             } else {
+                // Выход из полноэкранного режима
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) { // Safari поддержка
+                    document.webkitExitFullscreen();
                 }
             }
         });
