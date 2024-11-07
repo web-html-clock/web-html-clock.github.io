@@ -5,7 +5,7 @@
     <title>Neon Clock with Settings</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <style>
-        /* Основные стили */
+        /* CSS код */
         body {
             display: flex;
             justify-content: center;
@@ -15,29 +15,23 @@
             background-color: #000;
             font-family: 'Roboto', sans-serif;
             position: relative;
-            overflow: hidden;
-            padding: 20px;
         }
 
         .clock {
             background: linear-gradient(90deg, rgba(255,0,150,1) 0%, rgba(0,204,255,1) 100%);
-            padding: 50px;
-            border-radius: 30px;
-            box-shadow: 0 0 50px rgba(255, 0, 150, 0.8), 0 0 50px rgba(0, 204, 255, 0.8);
-            max-width: 800px;
-            width: 100%;
-            height: auto;
+            padding: 60px;
+            border-radius: 25px;
+            box-shadow: 0 0 60px rgba(255, 0, 150, 0.8), 0 0 60px rgba(0, 204, 255, 0.8);
         }
 
         .time {
-            font-size: 10vw;
-            max-font-size: 120px;
+            font-size: 8em; /* Увеличенный размер шрифта */
             color: white;
             text-align: center;
-            padding: 20px;
+            padding: 40px;
             background: rgba(0, 0, 0, 0.6);
-            border-radius: 25px;
-            box-shadow: 0 0 30px #0ff, 0 0 30px #f0f;
+            border-radius: 20px;
+            box-shadow: 0 0 40px #0ff, 0 0 40px #f0f;
         }
 
         .fullscreen-button,
@@ -67,7 +61,7 @@
             right: 20px;
         }
 
-        /* Модальное окно для настроек */
+        /* Стиль модального окна */
         .modal {
             display: none; 
             position: fixed; 
@@ -85,8 +79,7 @@
             padding: 20px;
             border: none;
             border-radius: 15px;
-            width: 90%;
-            max-width: 400px;
+            width: 320px;
             color: #fff;
             text-align: center;
             position: relative;
@@ -107,7 +100,7 @@
             color: #fff;
         }
 
-        /* Контейнер для переключателей */
+        /* Стиль контейнера для переключателей */
         .switch-container {
             display: flex;
             align-items: center;
@@ -175,35 +168,11 @@
             border: none;
             cursor: pointer;
         }
-
-        /* Медиазапросы для адаптивности */
-        @media (max-width: 768px) {
-            .time {
-                font-size: 8vw;
-                padding: 15px;
-            }
-
-            .clock {
-                padding: 30px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .time {
-                font-size: 6vw;
-                padding: 10px;
-            }
-
-            .clock {
-                padding: 20px;
-            }
-        }
-
     </style>
 </head>
 <body>
     <div class="clock" id="clock">
-        <div id="time" class="time">00:00 AM</div>
+        <div id="time" class="time">00:00:00 AM</div>
     </div>
 
     <!-- Кнопка для полноэкранного режима -->
@@ -276,7 +245,7 @@
                 formattedTime += `:${padZero(seconds)}`;
             }
             if (!is24HourFormat) {
-                formattedTime += `<span style="margin-left: 10px; color: #888;">${ampm}</span>`;
+                formattedTime += `<span style="margin-left: 20px; color: #888;">${ampm}</span>`;
             }
 
             timeElement.innerHTML = formattedTime.trim();
@@ -306,27 +275,55 @@
             switch (colorValue) {
                 case 'pink-blue':
                     clockElement.style.background = 'linear-gradient(90deg, rgba(255,0,150,1) 0%, rgba(0,204,255,1) 100%)';
-                    clockElement.style.boxShadow = '0 0 50px rgba(255, 0, 150, 0.8), 0 0 50px rgba(0, 204, 255, 0.8)';
+                    clockElement.style.boxShadow = '0 0 60px rgba(255, 0, 150, 0.8), 0 0 60px rgba(0, 204, 255, 0.8)';
                     break;
                 case 'pink-purple':
                     clockElement.style.background = 'linear-gradient(90deg, rgba(255,0,150,1) 0%, rgba(128,0,128,1) 100%)';
-                    clockElement.style.boxShadow = '0 0 50px rgba(255, 0, 150, 0.8), 0 0 50px rgba(128, 0, 128, 0.8)';
+                    clockElement.style.boxShadow = '0 0 60px rgba(255, 0, 150, 0.8), 0 0 60px rgba(128, 0, 128, 0.8)';
                     break;
                 case 'blue-green':
                     clockElement.style.background = 'linear-gradient(90deg, rgba(0,0,255,1) 0%, rgba(0,255,0,1) 100%)';
-                    clockElement.style.boxShadow = '0 0 50px rgba(0, 0, 255, 0.8), 0 0 50px rgba(0, 255, 0, 0.8)';
+                    clockElement.style.boxShadow = '0 0 60px rgba(0, 0, 255, 0.8), 0 0 60px rgba(0, 255, 0, 0.8)';
                     break;
                 case 'red-orange':
                     clockElement.style.background = 'linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(255,165,0,1) 100%)';
-                    clockElement.style.boxShadow = '0 0 50px rgba(255, 0, 0, 0.8), 0 0 50px rgba(255, 165, 0, 0.8)';
+                    clockElement.style.boxShadow = '0 0 60px rgba(255, 0, 0, 0.8), 0 0 60px rgba(255, 165, 0, 0.8)';
                     break;
                 case 'yellow-cyan':
                     clockElement.style.background = 'linear-gradient(90deg, rgba(255,255,0,1) 0%, rgba(0,255,255,1) 100%)';
-                    clockElement.style.boxShadow = '0 0 50px rgba(255, 255, 0, 0.8), 0 0 50px rgba(0, 255, 255, 0.8)';
+                    clockElement.style.boxShadow = '0 0 60px rgba(255, 255, 0, 0.8), 0 0 60px rgba(0, 255, 255, 0.8)';
+                    break;
+                case 'green':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(0,255,0,1) 0%, rgba(0,204,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 60px rgba(0, 255, 0, 0.8), 0 0 60px rgba(0, 204, 255, 0.8)';
+                    break;
+                case 'orange':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(255,165,0,1) 0%, rgba(0,204,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 60px rgba(255, 165, 0, 0.8), 0 0 60px rgba(0, 204, 255, 0.8)';
+                    break;
+                case 'blue':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(0,0,255,1) 0%, rgba(0,204,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 60px rgba(0, 0, 255, 0.8), 0 0 60px rgba(0, 204, 255, 0.8)';
+                    break;
+                case 'red':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(0,204,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 60px rgba(255, 0, 0, 0.8), 0 0 60px rgba(0, 204, 255, 0.8)';
+                    break;
+                case 'purple':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(128,0,128,1) 0%, rgba(0,204,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 60px rgba(128, 0, 128, 0.8), 0 0 60px rgba(0, 204, 255, 0.8)';
+                    break;
+                case 'yellow':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(255,255,0,1) 0%, rgba(0,204,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 60px rgba(255, 255, 0, 0.8), 0 0 60px rgba(0, 204, 255, 0.8)';
+                    break;
+                case 'cyan':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(0,255,255,1) 0%, rgba(0,204,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 60px rgba(0, 255, 255, 0.8), 0 0 60px rgba(0, 204, 255, 0.8)';
                     break;
                 default:
-                    clockElement.style.background = 'linear-gradient(90deg, rgba(0,0,255,1) 0%, rgba(0,204,255,1) 100%)';
-                    clockElement.style.boxShadow = '0 0 50px rgba(0, 0, 255, 0.8), 0 0 50px rgba(0, 204, 255, 0.8)';
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(255,0,150,1) 0%, rgba(0,204,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 60px rgba(255, 0, 150, 0.8), 0 0 60px rgba(0, 204, 255, 0.8)';
             }
         }
 
