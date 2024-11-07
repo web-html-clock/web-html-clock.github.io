@@ -155,10 +155,23 @@
         input:checked + .slider:before {
             transform: translateX(26px);
         }
+
+        /* Стиль выпадающего списка */
+        .select-container {
+            margin-top: 20px;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <div class="clock">
+    <div class="clock" id="clock">
         <div id="time" class="time">00:00:00 AM</div>
     </div>
 
@@ -185,6 +198,25 @@
                     <input type="checkbox" id="show-seconds-toggle" checked>
                     <span class="slider"></span>
                 </label>
+            </div>
+            <div class="select-container">
+                <label for="neon-color">Neon color:</label>
+                <select id="neon-color">
+                    <!-- Сначала сочетания цветов -->
+                    <option value="pink-blue">Pink & Blue</option>
+                    <option value="pink-purple">Pink & Purple</option>
+                    <option value="blue-green">Blue & Green</option>
+                    <option value="red-orange">Red & Orange</option>
+                    <option value="yellow-cyan">Yellow & Cyan</option>
+                    <!-- Однотонные цвета -->
+                    <option value="green">Green</option>
+                    <option value="orange">Orange</option>
+                    <option value="blue">Blue</option>
+                    <option value="red">Red</option>
+                    <option value="purple">Purple</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="cyan">Cyan</option>
+                </select>
             </div>
         </div>
     </div>
@@ -213,7 +245,7 @@
                 formattedTime += `:${padZero(seconds)}`;
             }
             if (!is24HourFormat) {
-                formattedTime += `<span style="margin-left: 20px;">${ampm}</span>`;
+                formattedTime += `<span style="margin-left: 20px; color: #888;">${ampm}</span>`;
             }
 
             timeElement.innerHTML = formattedTime.trim();
@@ -236,9 +268,69 @@
             }
         }
 
+        function updateNeonColor() {
+            const clockElement = document.getElementById('clock');
+            const colorValue = document.getElementById('neon-color').value;
+
+            switch (colorValue) {
+                case 'pink-blue':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(255,0,150,1) 0%, rgba(0,204,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 50px rgba(255, 0, 150, 0.8), 0 0 50px rgba(0, 204, 255, 0.8)';
+                    break;
+                case 'pink-purple':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(255,0,150,1) 0%, rgba(128,0,128,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 50px rgba(255, 0, 150, 0.8), 0 0 50px rgba(128, 0, 128, 0.8)';
+                    break;
+                case 'blue-green':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(0,0,255,1) 0%, rgba(0,255,0,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 50px rgba(0, 0, 255, 0.8), 0 0 50px rgba(0, 255, 0, 0.8)';
+                    break;
+                case 'red-orange':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(255,165,0,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 50px rgba(255, 0, 0, 0.8), 0 0 50px rgba(255, 165, 0, 0.8)';
+                    break;
+                case 'yellow-cyan':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(255,255,0,1) 0%, rgba(0,255,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 50px rgba(255, 255, 0, 0.8), 0 0 50px rgba(0, 255, 255, 0.8)';
+                    break;
+                case 'green':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(0,255,0,1) 0%, rgba(0,204,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 50px rgba(0, 255, 0, 0.8), 0 0 50px rgba(0, 204, 255, 0.8)';
+                    break;
+                case 'orange':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(255,165,0,1) 0%, rgba(0,204,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 50px rgba(255, 165, 0, 0.8), 0 0 50px rgba(0, 204, 255, 0.8)';
+                    break;
+                case 'blue':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(0,0,255,1) 0%, rgba(0,204,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 50px rgba(0, 0, 255, 0.8), 0 0 50px rgba(0, 204, 255, 0.8)';
+                    break;
+                case 'red':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(0,204,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 50px rgba(255, 0, 0, 0.8), 0 0 50px rgba(0, 204, 255, 0.8)';
+                    break;
+                case 'purple':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(128,0,128,1) 0%, rgba(0,204,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 50px rgba(128, 0, 128, 0.8), 0 0 50px rgba(0, 204, 255, 0.8)';
+                    break;
+                case 'yellow':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(255,255,0,1) 0%, rgba(0,204,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 50px rgba(255, 255, 0, 0.8), 0 0 50px rgba(0, 204, 255, 0.8)';
+                    break;
+                case 'cyan':
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(0,255,255,1) 0%, rgba(0,204,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 50px rgba(0, 255, 255, 0.8), 0 0 50px rgba(0, 204, 255, 0.8)';
+                    break;
+                default:
+                    clockElement.style.background = 'linear-gradient(90deg, rgba(255,0,150,1) 0%, rgba(0,204,255,1) 100%)';
+                    clockElement.style.boxShadow = '0 0 50px rgba(255, 0, 150, 0.8), 0 0 50px rgba(0, 204, 255, 0.8)';
+            }
+        }
+
         // Начинаем обновление времени сразу при загрузке страницы
         document.addEventListener('DOMContentLoaded', () => {
             startClock();
+            updateNeonColor();
         });
 
         // Полноэкранный режим
@@ -267,6 +359,7 @@
         const closeSettings = document.getElementById('close-settings');
         const timeFormatToggle = document.getElementById('time-format-toggle');
         const showSecondsToggle = document.getElementById('show-seconds-toggle');
+        const neonColorSelect = document.getElementById('neon-color');
 
         settingsBtn.addEventListener('click', () => {
             settingsModal.style.display = 'block';
@@ -290,6 +383,10 @@
         showSecondsToggle.addEventListener('change', (event) => {
             showSeconds = event.target.checked;
             startClock(); // Перезапускаем часы после изменения показа секунд
+        });
+
+        neonColorSelect.addEventListener('change', (event) => {
+            updateNeonColor(); // Обновляем цвет неона при изменении выбора
         });
     </script>
 </body>
