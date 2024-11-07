@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neon Clock</title>
+    <title>Neon Clock with Settings</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <style>
         /* CSS код */
@@ -20,13 +20,13 @@
 
         .clock {
             background: linear-gradient(90deg, rgba(255,0,150,1) 0%, rgba(0,204,255,1) 100%);
-            padding: 50px; /* Увеличен padding для большей выразительности */
+            padding: 50px;
             border-radius: 25px;
             box-shadow: 0 0 50px rgba(255, 0, 150, 0.8), 0 0 50px rgba(0, 204, 255, 0.8);
         }
 
         .time {
-            font-size: 8em; /* Еще больше увеличенный размер шрифта */
+            font-size: 6em;
             color: white;
             text-align: center;
             padding: 30px;
@@ -35,10 +35,10 @@
             box-shadow: 0 0 30px #0ff, 0 0 30px #f0f;
         }
 
-        .fullscreen-button {
+        .fullscreen-button,
+        .settings-button {
             position: fixed;
             bottom: 20px;
-            right: 20px;
             background: rgba(255, 255, 255, 0.1);
             color: #fff;
             border: none;
@@ -49,8 +49,112 @@
             transition: background 0.3s;
         }
 
-        .fullscreen-button:hover {
+        .fullscreen-button:hover,
+        .settings-button:hover {
             background: rgba(255, 255, 255, 0.3);
+        }
+
+        .fullscreen-button {
+            right: 70px;
+        }
+
+        .settings-button {
+            right: 20px;
+        }
+
+        /* Стиль модального окна */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background-color: #333;
+            margin: auto;
+            padding: 20px;
+            border: none;
+            border-radius: 15px;
+            width: 320px;
+            color: #fff;
+            text-align: center;
+            position: relative;
+            top: 20%;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #aaa;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #fff;
+        }
+
+        /* Стиль контейнера для переключателей */
+        .switch-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 20px 0;
+            padding: 0 20px;
+        }
+
+        /* Стиль переключателя */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            margin-left: 15px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
         }
     </style>
 </head>
@@ -59,24 +163,58 @@
         <div id="time" class="time">00:00:00 AM</div>
     </div>
 
-    <button id="fullscreen-btn" class="fullscreen-button">⛶</button>
+    <!-- Кнопка для полноэкранного режима -->
+    <button id="fullscreen-btn" class="fullscreen-button">📺</button>
+
+    <!-- Кнопка для настроек -->
+    <button id="settings-btn" class="settings-button">⚙️</button>
+
+    <!-- Модальное окно с настройками -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-settings" class="close">&times;</span>
+            <div class="switch-container">
+                <label for="time-format">24-hour format</label>
+                <label class="switch">
+                    <input type="checkbox" id="time-format-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="switch-container">
+                <label for="show-seconds">Show seconds</label>
+                <label class="switch">
+                    <input type="checkbox" id="show-seconds-toggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // JavaScript код для отображения времени
+        let is24HourFormat = false;
+        let showSeconds = true;
+        let clockInterval;
+
         function updateClock() {
             const timeElement = document.getElementById('time');
             const now = new Date();
             let hours = now.getHours();
             const minutes = now.getMinutes();
-            const seconds = now.getSeconds();
-            const ampm = hours >= 12 ? 'PM' : 'AM';
+            let seconds = now.getSeconds();
+            let ampm = '';
 
-            // Convert hours from 24-hour to 12-hour format
-            hours = hours % 12;
-            hours = hours ? hours : 12; // '0' should be displayed as '12'
+            if (!is24HourFormat) {
+                ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12; // '0' should be displayed as '12'
+            }
 
-            // Add leading zeros for minutes and seconds
-            const formattedTime = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)} ${ampm}`;
+            let formattedTime = `${padZero(hours)}:${padZero(minutes)}`;
+            if (showSeconds) {
+                formattedTime += `:${padZero(seconds)}`;
+            }
+            formattedTime += ` ${ampm}`.trim();
+
             timeElement.textContent = formattedTime;
         }
 
@@ -84,32 +222,73 @@
             return number < 10 ? '0' + number : number;
         }
 
-        // Запуск функции при загрузке страницы и каждые 1000 миллисекунд
+        function startClock() {
+            if (clockInterval) {
+                clearInterval(clockInterval);
+            }
+
+            updateClock();
+            if (showSeconds) {
+                clockInterval = setInterval(updateClock, 1000);
+            } else {
+                clockInterval = setInterval(updateClock, 60000);
+            }
+        }
+
+        // Начинаем обновление времени сразу при загрузке страницы
         document.addEventListener('DOMContentLoaded', () => {
-            updateClock(); // Initial call to show the clock immediately
-            setInterval(updateClock, 1000); // Update clock every second
+            startClock();
         });
 
-        // JavaScript код для перехода в полноэкранный режим с поддержкой Safari
+        // Полноэкранный режим
         const fullscreenBtn = document.getElementById('fullscreen-btn');
         fullscreenBtn.addEventListener('click', () => {
             const element = document.documentElement;
 
             if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-                // Запуск полноэкранного режима для различных браузеров
                 if (element.requestFullscreen) {
                     element.requestFullscreen();
-                } else if (element.webkitRequestFullscreen) { // Safari поддержка
+                } else if (element.webkitRequestFullscreen) {
                     element.webkitRequestFullscreen();
                 }
             } else {
-                // Выход из полноэкранного режима
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) { // Safari поддержка
+                } else if (document.webkitExitFullscreen) {
                     document.webkitExitFullscreen();
                 }
             }
+        });
+
+        // Модальное окно с настройками
+        const settingsBtn = document.getElementById('settings-btn');
+        const settingsModal = document.getElementById('settings-modal');
+        const closeSettings = document.getElementById('close-settings');
+        const timeFormatToggle = document.getElementById('time-format-toggle');
+        const showSecondsToggle = document.getElementById('show-seconds-toggle');
+
+        settingsBtn.addEventListener('click', () => {
+            settingsModal.style.display = 'block';
+        });
+
+        closeSettings.addEventListener('click', () => {
+            settingsModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === settingsModal) {
+                settingsModal.style.display = 'none';
+            }
+        });
+
+        timeFormatToggle.addEventListener('change', (event) => {
+            is24HourFormat = event.target.checked;
+            startClock(); // Перезапускаем часы после изменения формата
+        });
+
+        showSecondsToggle.addEventListener('change', (event) => {
+            showSeconds = event.target.checked;
+            startClock(); // Перезапускаем часы после изменения показа секунд
         });
     </script>
 </body>
