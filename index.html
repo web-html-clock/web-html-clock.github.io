@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Clock</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+    <style>
+        /* CSS код */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+            font-family: 'Roboto', sans-serif;
+            position: relative;
+        }
+
+        .clock {
+            background: linear-gradient(90deg, rgba(255,0,150,1) 0%, rgba(0,204,255,1) 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 0, 150, 0.8), 0 0 30px rgba(0, 204, 255, 0.8);
+        }
+
+        .time {
+            font-size: 5em; /* Увеличенный размер шрифта */
+            color: white;
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            box-shadow: 0 0 15px #0ff, 0 0 15px #f0f;
+        }
+
+        .fullscreen-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            transition: background 0.3s;
+        }
+
+        .fullscreen-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="clock">
+        <div id="time" class="time">00:00:00 AM</div>
+    </div>
+
+    <button id="fullscreen-btn" class="fullscreen-button">📺</button>
+
+    <script>
+        // JavaScript код для отображения времени
+        function updateClock() {
+            const timeElement = document.getElementById('time');
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+
+            // Convert hours from 24-hour to 12-hour format
+            hours = hours % 12;
+            hours = hours ? hours : 12; // '0' should be displayed as '12'
+
+            const formattedTime = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)} ${ampm}`;
+            timeElement.textContent = formattedTime;
+        }
+
+        function padZero(number) {
+            return number < 10 ? '0' + number : number;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock(); // Initial call to show clock immediately
+
+        // JavaScript код для перехода в полноэкранный режим
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
